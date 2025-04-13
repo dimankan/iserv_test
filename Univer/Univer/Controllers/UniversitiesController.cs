@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Univer.Models.ApiModels;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,21 +13,12 @@ public class UniversitiesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(
-        [FromQuery] string country = null,
-        [FromQuery] string name = null,
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> Get([FromQuery] string country = null,[FromQuery] string name = null)
     {
-        var (items, totalCount) = await _service.GetUniversities(
-            country, name, page, pageSize);
-
-        return Ok(new
-        {
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize,
-            Items = items
-        });
+        var universities = await _service.GetUniversities(country, name);
+        if(universities == null)
+            return NotFound(); 
+        
+        return Ok(universities);
     }
 }

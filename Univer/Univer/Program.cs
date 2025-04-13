@@ -54,6 +54,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<UniversitiesContext>();
+        context.Database.EnsureDeleted();// !!! удал€ю бд
         context.Database.Migrate();
         Console.WriteLine("Database migrations applied successfully.");
     }

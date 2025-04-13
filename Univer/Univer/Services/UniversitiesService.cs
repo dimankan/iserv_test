@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 public class UniversitiesService : IUniversitiesService
 {
@@ -9,11 +10,7 @@ public class UniversitiesService : IUniversitiesService
         _db = db;
     }
 
-    public async Task<(List<University> Items, int TotalCount)> GetUniversities(
-      string country = null,
-      string name = null,
-      int page = 1,
-      int pageSize = 20)
+    public async Task<List<University>> GetUniversities(string country = null, string name = null)
     {
         var query = _db.Universities.AsQueryable();
 
@@ -30,11 +27,9 @@ public class UniversitiesService : IUniversitiesService
         var totalCount = await query.CountAsync();
         var items = await query
             .OrderBy(u => u.Country)
-            .ThenBy(u => u.Name)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
+            .ThenBy(u => u.Name)            
             .ToListAsync();
 
-        return (items, totalCount);
+        return items;
     }
 }
