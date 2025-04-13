@@ -19,7 +19,6 @@ public class UniversitiesService : IUniversitiesService
 
         if (!string.IsNullOrEmpty(country))
         {
-            // Альтернатива ILike для любой СУБД
             query = query.Where(u => u.Country.ToLower().Contains(country.ToLower()));
         }
 
